@@ -29,13 +29,13 @@ public class CSVConverter {
 	 * @returns a List of {@link RailwayStation} corresponding 
 	 * to the entries in the file.
 	 */
-	public static List<RailwayStation> saveFromCSV(Path path) { 
-		ClassPathResource c = new ClassPathResource("table.csv"); 
+	public static List<RailwayStation> readFromCSV(ClassPathResource CSVResource) { 
+		
 		final Logger log = LoggerFactory.getLogger(CSVConverter.class);
 		List<RailwayStation> RailwayStationData = new ArrayList<RailwayStation>();
 		
 		try { 
-			Scanner scanner = new Scanner(c.getFile()); 
+			Scanner scanner = new Scanner(CSVResource.getFile()); 
 			
 		    while (scanner.hasNextLine()) { 
 		    	String row = scanner.nextLine();

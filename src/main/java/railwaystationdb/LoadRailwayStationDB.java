@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 
 /**
@@ -17,12 +18,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LoadRailwayStationDB { 
 	
-	Path path =  Paths.get("C:\\Users\\re1d1\\Documents\\Betriebsstellen\\table.csv");
+	ClassPathResource CSVResource = new ClassPathResource("table.csv");
 	
 	@Bean
 	CommandLineRunner initDatabase(RailwayStationRepository repository) {
 		return args -> {
-	    	List<RailwayStation> RailwayStations = CSVConverter.saveFromCSV(path);
+	    	List<RailwayStation> RailwayStations = CSVConverter
+	    			.readFromCSV(CSVResource);
 	    	repository.saveAll(RailwayStations); 
 	    };
 	  }
