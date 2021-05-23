@@ -14,7 +14,7 @@ import org.springframework.core.io.ClassPathResource;
  * {@link RailwayStation} objects. 
  */
 @Configuration
-public class LoadRailwayStationDB { 
+public class RailwayStationDBLoader { 
 	
 	ClassPathResource CSVResource = new ClassPathResource("table.csv");
 	

@@ -21,6 +21,8 @@ public class CSVConverter {
 	 * Returns a List of {@link RailwayStation} using a 
 	 * CSV file.  
 	 * @param CSVResource The file location of the CSV file as a {@link ClassPathResource}. 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 * @returns a List of {@link RailwayStation} corresponding 
 	 * to the entries in the file.
 	 */ 
@@ -31,15 +33,11 @@ public class CSVConverter {
 		FileReader reader = new FileReader(CSVResource.getFile());
 		List<RailwayStation> RailwayStationData = new ArrayList<RailwayStation>();
 		
-		try {
-			RailwayStationData = new CsvToBeanBuilder<RailwayStation>(reader)
-					.withType(RailwayStation.class)
-					.withSeparator(';')
-					.build()
-					.parse();
-		} catch (IllegalStateException e) { 
-			e.printStackTrace();
-		}
+		RailwayStationData = new CsvToBeanBuilder<RailwayStation>(reader)
+				.withType(RailwayStation.class)
+				.withSeparator(';')
+				.build()
+				.parse();
 		
 		return RailwayStationData;
 	} 

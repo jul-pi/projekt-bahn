@@ -22,7 +22,7 @@ public class RailwayStation {
 	@CsvBindByName(column = "Kurzname", required = true)
 	private String shortName;
 	
-	@CsvBindByName(column = "Typ", required = true)
+	@CsvBindByName(column = "Typ")
 	private String type;
 	
 	@CsvBindByName(column = "Betr-Zust")
