@@ -3,27 +3,54 @@ package railwaystationdb;
 import javax.persistence.Entity; 
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonProperty; 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.opencsv.bean.CsvBindByName; 
 
 /**
  * Represents a railway station.
  */
 @Entity 
 public class RailwayStation { 
-
-	@Id private String abbreviation; 
+	
+	@CsvBindByName(column = "Abk", required = true)
+	@Id 
+	private String abbreviation; 
+	
+	@CsvBindByName(column = "Name", required = true)
 	private String name;
+	
+	@CsvBindByName(column = "Kurzname", required = true)
 	private String shortName;
+	
+	@CsvBindByName(column = "Typ", required = true)
 	private String type;
+	
+	@CsvBindByName(column = "Betr-Zust")
 	private String status;
+	
+	@CsvBindByName(column = "Primary location code")
 	private String primaryLocationCode;
+	
+	@CsvBindByName(column = "UIC")
 	private String UIC;
+	
+	@CsvBindByName(column = "RB")
 	private String rb;
+	
+	@CsvBindByName(column = "gültig von")
 	private String eligibleSince;
+	
+	@CsvBindByName(column = "gültig bis")
 	private String eligibleUntil;
+	
+	@CsvBindByName(column = "Netz-Key")
 	private String netzKey;
+	
+	@CsvBindByName(column = "Fpl-rel")
 	private String scheduleRelevance;
-	private String scheduleLimit;
+	
+	@CsvBindByName(column = "Fpl-Gr")
+	private String scheduleLimit; 
 	
 	private final static int INPUT_LENGTH = 13;
 	
