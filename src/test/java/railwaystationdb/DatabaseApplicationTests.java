@@ -7,17 +7,19 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate; 
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class DatabaseApplicationTests {
-	 
-	private int port = 9099; 
+	
+    @LocalServerPort
+    private int serverPort;
 
 	@Autowired
 	private RailwayStationController controller;
@@ -30,19 +32,21 @@ class DatabaseApplicationTests {
 	}
 	
 	@Test
-	public void requestIfAvailableStationShouldReturnOK() throws Exception {
+	public void requestIfAvailableStationReturnsOK() throws Exception {
 		
 		ResponseEntity<String> response = restTemplate.
-				getForEntity("http://localhost:" + port + "/betriebsstelle/aamp", String.class);
+				getForEntity("http://localhost:" + serverPort + 
+						"/betriebsstelle/aamp", String.class);
 		
-		assertTrue(response.getStatusCode().equals(HttpStatus.OK)); 
+		assertTrue(response.getStatusCode().equals(HttpStatus.OK));  
 	}
 	
 	@Test
 	public void checkIfEntryIsCorrect() throws Exception { 
 		
 		ResponseEntity<String> response = restTemplate.
-				getForEntity("http://localhost:" + port + "/betriebsstelle/aamp", String.class);
+				getForEntity("http://localhost:" + serverPort + 
+						"/betriebsstelle/aamp", String.class);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = mapper.readTree(response.getBody());
