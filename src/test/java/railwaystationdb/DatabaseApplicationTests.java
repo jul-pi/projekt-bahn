@@ -42,6 +42,16 @@ class DatabaseApplicationTests {
 	}
 	
 	@Test
+	public void requestIfAvailableStationReturnsNotFound() throws Exception {
+		
+		ResponseEntity<String> response = restTemplate.
+				getForEntity("http://localhost:" + serverPort + 
+						"/betriebsstelle/0000", String.class);
+		
+		assertTrue(response.getStatusCode().equals(HttpStatus.NOT_FOUND));  
+	}
+	
+	@Test
 	public void checkIfEntryIsCorrect() throws Exception { 
 		
 		ResponseEntity<String> response = restTemplate.

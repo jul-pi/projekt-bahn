@@ -3,7 +3,6 @@ package railwaystationdb;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.core.io.ClassPathResource;
@@ -30,15 +29,13 @@ public class CSVConverter {
 	public static List<RailwayStation> readFromCSV(ClassPathResource CSVResource) 
 			throws FileNotFoundException, IOException {
 		
-		FileReader reader = new FileReader(CSVResource.getFile());
-		List<RailwayStation> RailwayStationData = new ArrayList<RailwayStation>();
+		FileReader reader = new FileReader(CSVResource.getFile());		
 		
-		RailwayStationData = new CsvToBeanBuilder<RailwayStation>(reader)
+		return new CsvToBeanBuilder<RailwayStation>(reader)
 				.withType(RailwayStation.class)
 				.withSeparator(';')
 				.build()
-				.parse();
+				.parse();	
 		
-		return RailwayStationData;
 	} 
 }

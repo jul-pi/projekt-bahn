@@ -1,6 +1,4 @@
-package railwaystationdb;
- 
-import java.util.List;
+package railwaystationdb; 
  
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -16,14 +14,13 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 public class RailwayStationDBLoader { 
 	
-	ClassPathResource CSVResource = new ClassPathResource("table.csv");
+	ClassPathResource CSVResource = new ClassPathResource("table.csv"); 
 	
 	@Bean
 	CommandLineRunner initDatabase(RailwayStationRepository repository) {
-		return args -> {
-	    	List<RailwayStation> RailwayStations = CSVConverter
-	    			.readFromCSV(CSVResource);
-	    	repository.saveAll(RailwayStations); 
-	    };
+		return args -> { 
+			repository.saveAll(CSVConverter.readFromCSV(CSVResource));
+			};
 	  }
+	
 } 
