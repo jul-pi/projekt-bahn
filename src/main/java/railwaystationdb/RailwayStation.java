@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Entity; 
 import javax.persistence.Id;
-
+ 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
@@ -16,7 +16,7 @@ import com.opencsv.bean.CsvDate;
 public class RailwayStation { 
 	
 	@CsvBindByName(column = "Abk", required = true)
-	@Id 
+	@Id   
 	private String abbreviation; 
 	
 	@CsvBindByName(column = "Name", required = true)
@@ -57,7 +57,11 @@ public class RailwayStation {
 	@CsvBindByName(column = "Fpl-Gr")
 	private String scheduleLimit; 
 	
-	public RailwayStation() {} 
+	public RailwayStation() {}  
+	
+	public RailwayStation(String abbreviation) {
+		this.abbreviation = abbreviation;
+	}
 	
 	@JsonProperty("Typ")
 	public String getType() {
@@ -73,4 +77,21 @@ public class RailwayStation {
 	public String getShortName() {
 		return this.shortName;
 	} 
+	
+	//@JsonIgnore
+	public String getAbbreviation() {
+		return this.abbreviation;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+	
+	public void setAbbreviation(String abbreviation) {
+		this.abbreviation = abbreviation;
+	}
 }
