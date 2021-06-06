@@ -3,7 +3,8 @@ package railwaystationdb;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Collections; 
+import java.util.Collections;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,11 +30,6 @@ class DatabaseApplicationTests {
 	private RailwayStationController controller;
 
 	private TestRestTemplate restTemplate = new TestRestTemplate(); 
-	
-
-	private String SHORT_NAME = "Short Name";
-	private String LONG_NAME = "Long Name";
-	private String ABBREVIATION = "TEST";
 
 	@Test
 	public void contextLoads() throws Exception {
@@ -73,9 +69,12 @@ class DatabaseApplicationTests {
 		assertTrue(name.asText().equals("Anckelmannsplatz"));
 	}
 	
- 
 	@Test
 	public void testIfPostWorks() throws Exception {
+		
+		String SHORT_NAME = "Short Name";
+		String LONG_NAME = "Long Name";
+		String ABBREVIATION = "TEST";
 		
 		RailwayStation testStation = new RailwayStation(ABBREVIATION); 
 		testStation.setShortName(SHORT_NAME);
@@ -89,24 +88,72 @@ class DatabaseApplicationTests {
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		
 		ResponseEntity<String> response = restTemplate
-				.postForEntity("http://localhost:"+serverPort+"/register", jsonNode, String.class);  
+				.postForEntity("http://localhost:" + serverPort + "/register", 
+						jsonNode, String.class);  
 		
-		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
+		assertTrue(response.getStatusCode().equals(HttpStatus.CREATED));
 	}
 	
-	@Test void testIfPostWorksByCheckingIfAvailablePerGet() throws Exception { 
+ 
+	@Test
+	public void testIfAlreadyExistingObjectIsDenied() throws Exception {
 		
-		testIfPostWorks();
+		String SHORT_NAME = "Short Name";
+		String LONG_NAME = "Long Name";
+		String ABBREVIATION = "AAMP";
 		
-		ResponseEntity<String> response2 = restTemplate.
+		RailwayStation testStation = new RailwayStation(ABBREVIATION); 
+		testStation.setShortName(SHORT_NAME);
+		testStation.setName(LONG_NAME); 
+
+		ObjectMapper mapper = new ObjectMapper(); 
+		JsonNode jsonNode = mapper.valueToTree(testStation);  
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON); 
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		
+		ResponseEntity<String> response = restTemplate
+				.postForEntity("http://localhost:" + serverPort + "/register", 
+						jsonNode, String.class);  
+		
+		assertTrue(response.getStatusCode().equals(HttpStatus.CONFLICT));
+	}
+	
+	@Test void testIfPostWorksByCheckingIfAvailablePerGet() throws Exception {  
+		
+		String SHORT_NAME = "Short Name"; 
+		String ABBREVIATION = "TEST";
+		
+		ResponseEntity<String> response = restTemplate.
 				getForEntity("http://localhost:" + serverPort + 
 						"/betriebsstelle/" + ABBREVIATION, String.class); 
-		
-		assertTrue(response2.getStatusCode().equals(HttpStatus.OK)); 
+
+		assertTrue(response.getStatusCode().equals(HttpStatus.OK)); 
 		 
-		ObjectMapper mapper2 = new ObjectMapper(); 
-		JsonNode name2 = mapper2.readTree(response2.getBody()).path("Kurzname"); 
-		assertTrue(name2.asText().equals(SHORT_NAME));
+		ObjectMapper mapper = new ObjectMapper(); 
+		JsonNode name = mapper.readTree(response.getBody()).path("Kurzname"); 
+		assertTrue(name.asText().equals(SHORT_NAME));
+	}
+	
+ 
+	@Test
+	public void testMalformedJsonNForPost() throws Exception { 
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("something", "certainly wrong");
+
+		ObjectMapper mapper = new ObjectMapper(); 
+		JsonNode jsonNode = mapper.valueToTree(map);  
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON); 
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		
+		ResponseEntity<String> response = restTemplate
+				.postForEntity("http://localhost:" + serverPort + "/register", 
+						jsonNode, String.class);  
+		 
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
 	}
 
 }

@@ -4,25 +4,27 @@ import java.time.LocalDate;
 
 import javax.persistence.Entity; 
 import javax.persistence.Id;
- 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvDate;
+import com.opencsv.bean.CsvDate; 
 
 /**
  * Represents a railway station.
  */
 @Entity 
 public class RailwayStation { 
-	
 	@CsvBindByName(column = "Abk", required = true)
-	@Id   
+	@Id  
+	@NotBlank(message = "Abbreviation cannot be empty.")
 	private String abbreviation; 
 	
 	@CsvBindByName(column = "Name", required = true)
+	@NotBlank(message = "Name cannot be empty.")
 	private String name;
 	
-	@CsvBindByName(column = "Kurzname", required = true)
+	@CsvBindByName(column = "Kurzname") 
 	private String shortName;
 	
 	@CsvBindByName(column = "Typ")
