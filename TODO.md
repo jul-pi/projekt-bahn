@@ -1,7 +1,3 @@
-# TODO
-
-This text is not a task. 
-
-# WHAT NEXT 
+ # TODO
 
 - [ ] Check exceptions with JSON to POST
